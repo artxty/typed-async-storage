@@ -1,7 +1,18 @@
 {
   "name": "typed-async-storage",
   "version": "1.0.0",
-  "description": "",
+  "description": "A tiny library-wrapper for AsyncStorage that allows you to create schema-based storage using PropTypes",
+  "keywords": [
+    "react",
+    "react-native",
+    "asyncstorage",
+    "storage",
+    "asyncstorage-wrapper"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artxty/typed-async-storage.git"
+  },
   "main": "src/index.js",
   "scripts": {
     "test": "jest",
