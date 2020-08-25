@@ -1,0 +1,32 @@
+{
+  "name": "typed-async-storage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "author": "Artur Ty",
+  "license": "MIT License",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test && npm run lint",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.2",
+    "@react-native-community/async-storage": "^1.11.0",
+    "eslint": "^7.7.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.20.0",
+    "husky": "^4.2.5",
+    "jest": "^26.2.2"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2"
+  }
+}
