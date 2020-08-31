@@ -1,6 +1,6 @@
 {
   "name": "typed-async-storage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A tiny library-wrapper for AsyncStorage that allows you to create schema-based storage using PropTypes",
   "keywords": [
     "react",
