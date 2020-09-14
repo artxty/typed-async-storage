@@ -24,7 +24,8 @@ const createSetter = (storageName, storage, key, schemaSegment) => {
 };
 
 const createMultiSetter = (storageName, storage, schema) => async (object) => {
-  validate(storageName, schema, object);
+  const schemaObject = { [storageName]: schema };
+  validate(storageName, schemaObject, object);
   await storage.multiSet(object);
 };
 
