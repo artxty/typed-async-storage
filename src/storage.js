@@ -34,9 +34,12 @@ module.exports = function wrapAsyncStorage(name, AsyncStorage) {
     }
   };
 
-  const multiSet = async (rawPairs = []) => {
+  const multiSet = async (dataObject = {}) => {
     try {
-      const pairs = rawPairs.map(([key, value]) => [getFullKey(name, key), JSON.stringify(value)]);
+      const pairs = Object
+        .entries(dataObject)
+        .map(([key, value]) => [getFullKey(name, key), JSON.stringify(value)]);
+
       await AsyncStorage.multiSet(pairs);
       return Promise.resolve(true);
     } catch (e) {
