@@ -1,10 +1,10 @@
 const { getFullKey, getShortKey } = require('./helpers');
 
-module.exports = function wrapAsyncStorage(name, asyncStorageInstance) {
+module.exports = function wrapAsyncStorage(name, AsyncStorage) {
   const setItem = async (key = '', value = null) => {
     try {
       const fullKey = getFullKey(name, key);
-      await asyncStorageInstance.setItem(fullKey, JSON.stringify(value));
+      await AsyncStorage.setItem(fullKey, JSON.stringify(value));
       return Promise.resolve(true);
     } catch (e) {
       throw new Error(e);
@@ -14,7 +14,7 @@ module.exports = function wrapAsyncStorage(name, asyncStorageInstance) {
   const getItem = async (key = '') => {
     try {
       const fullKey = getFullKey(name, key);
-      const data = await asyncStorageInstance.getItem(fullKey);
+      const data = await AsyncStorage.getItem(fullKey);
       return JSON.parse(data);
     } catch (e) {
       throw new Error(e);
@@ -24,7 +24,7 @@ module.exports = function wrapAsyncStorage(name, asyncStorageInstance) {
   const multiGet = async (keys = []) => {
     try {
       const fullKeys = keys.map((key) => getFullKey(name, key));
-      const data = await asyncStorageInstance.multiGet(fullKeys);
+      const data = await AsyncStorage.multiGet(fullKeys);
       return data.reduce((acc, [key, value]) => ({
         ...acc,
         [getShortKey(name, key)]: JSON.parse(value),
@@ -37,7 +37,7 @@ module.exports = function wrapAsyncStorage(name, asyncStorageInstance) {
   const multiSet = async (rawPairs = []) => {
     try {
       const pairs = rawPairs.map(([key, value]) => [getFullKey(name, key), JSON.stringify(value)]);
-      await asyncStorageInstance.multiSet(pairs);
+      await AsyncStorage.multiSet(pairs);
       return Promise.resolve(true);
     } catch (e) {
       throw new Error(e);
