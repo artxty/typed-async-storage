@@ -1,5 +1,4 @@
 const { checkPropTypes } = require('prop-types/prop-types');
-const { getStorageFullName } = require('./helpers');
 
 const getMatchByRegexp = (regexp, msg) => {
   const parsedMsg = regexp.exec(msg);
@@ -31,7 +30,7 @@ const validate = (storageName, typeSpecs, values) => {
   const t = console.error;
   const messages = [];
   console.error = (msg) => messages.push(msg);
-  checkPropTypes(typeSpecs, values, 'property', getStorageFullName(storageName));
+  checkPropTypes(typeSpecs, values, 'property', storageName);
   console.error = t;
   if (messages.length !== 0) {
     const errorMessages = parseErrorMessages(messages);
@@ -50,7 +49,7 @@ const validateSchema = (storageName, schema, isMultiple) => {
     /* This scans only first level */
     Object.entries(schema).forEach(([key, value]) => {
       if (typeof value !== 'function' || value.name !== 'bound checkType') {
-        const msg = `Failed property type: ${getStorageFullName(storageName)}: property type '${key}' is invalid; it must be a function, usually from the \`prop-types\` package, but received '${typeof value}'.`;
+        const msg = `Failed property type: ${storageName}: property type '${key}' is invalid; it must be a function, usually from the \`prop-types\` package, but received '${typeof value}'.`;
         throw new TypeError(msg);
       }
     });
