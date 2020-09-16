@@ -103,7 +103,7 @@ describe('createStorage', () => {
   });
 
   it('calls `validateSchema`', () => {
-    expect(validateSchema).toBeCalledWith(schema);
+    expect(validateSchema).toHaveBeenCalled();
   });
 
   it('returns result of `createMethods` function', () => {

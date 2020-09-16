@@ -42,15 +42,19 @@ const validate = (storageName, typeSpecs, values) => {
   }
 };
 
-const validateSchema = (schema) => {
-  /* This scans only first level */
-  const [storageName] = Object.keys(schema);
-  Object.entries(schema[storageName]).forEach(([key, value]) => {
-    if (typeof value !== 'function' || value.name !== 'bound checkType') { // 'bound checkType' is the name of PropTypes type function
-      const msg = `Failed property type: ${getStorageFullName(storageName)}: property type '${key}' is invalid; it must be a function, usually from the \`prop-types\` package, but received '${typeof value}'.`;
-      throw new TypeError(msg);
-    }
-  });
+const validateSchema = (storageName, schema, isMultiple) => {
+  if (isMultiple && (typeof schema !== 'function' || schema.name !== 'bound checkType')) { // 'bound checkType' is the name of PropTypes type function
+    const msg = `${storageName}: schema for multiple storage should be wrapped in PropTypes.objectOf(), not in javascript object'.`;
+    throw new TypeError(msg);
+  } else {
+    /* This scans only first level */
+    Object.entries(schema).forEach(([key, value]) => {
+      if (typeof value !== 'function' || value.name !== 'bound checkType') {
+        const msg = `Failed property type: ${getStorageFullName(storageName)}: property type '${key}' is invalid; it must be a function, usually from the \`prop-types\` package, but received '${typeof value}'.`;
+        throw new TypeError(msg);
+      }
+    });
+  }
 };
 
 module.exports = {

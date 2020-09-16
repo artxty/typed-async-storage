@@ -41,10 +41,6 @@ const createMethods = (schema, storageName, storage) => {
 };
 
 const createMultipleMethods = (schema, storageName, storage) => {
-  // multiRemove
-  // multiMerge
-  // getAllKeys
-
   const methods = {
     get: (keys = []) => storage.multiGet(keys),
     set: createMultiSetter(storageName, storage, schema),
@@ -58,14 +54,14 @@ const createStorage = ({
   schema = {},
   name = '',
   AsyncStorage = null,
-  multiple = false,
+  isMultiple = false,
 }) => {
   /* validation: check name(warning), check AsyncStorage(error) */
-  validateSchema(schema);
+  validateSchema(name, schema, isMultiple);
 
   const storage = wrapAsyncStorage(name, AsyncStorage);
 
-  if (multiple) {
+  if (isMultiple) {
     return createMultipleMethods(schema, name, storage);
   }
   return createMethods(schema, name, storage);
