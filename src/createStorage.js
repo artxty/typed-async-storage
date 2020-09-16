@@ -40,7 +40,7 @@ const createMethods = (schema, storageName, storage) => {
   return methods;
 };
 
-const createMultipleMethods = (schema, storageName, storage) => {
+const createMultiMethods = (schema, storageName, storage) => {
   const methods = {
     get: (keys = []) => storage.multiGet(keys),
     set: createMultiSetter(storageName, storage, schema),
@@ -65,11 +65,11 @@ const createStorage = ({
   const storage = wrapAsyncStorage(name, AsyncStorage);
 
   if (isMultiple) {
-    return createMultipleMethods(schema, name, storage);
+    return createMultiMethods(schema, name, storage);
   }
   return createMethods(schema, name, storage);
 };
 
 module.exports = {
-  createStorage, createMethods, createGetter, createSetter,
+  createStorage, createMethods, createGetter, createSetter, createMultiSetter, createMultiMethods,
 };
