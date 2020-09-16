@@ -51,12 +51,15 @@ const createMultipleMethods = (schema, storageName, storage) => {
 
 /* Add 'clear' function */
 const createStorage = ({
-  schema = {},
-  name = '',
-  AsyncStorage = null,
+  schema,
+  name,
+  AsyncStorage,
   isMultiple = false,
 }) => {
-  /* validation: check name(warning), check AsyncStorage(error) */
+  if (!schema) throw new Error('schema is required');
+  if (!name) throw new Error('name is required');
+  if (!AsyncStorage) throw new Error('AsyncStorage is required');
+
   validateSchema(name, schema, isMultiple);
 
   const storage = wrapAsyncStorage(name, AsyncStorage);
