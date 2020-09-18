@@ -5,13 +5,18 @@ const {
   createMethods,
   createSetter,
   createGetter,
+  createMultiSetter,
+  createMultiGetter,
 } = require('../src/createStorage');
+
 const wrapAsyncStorage = require('../src/storage');
 const { validate, validateSchema } = require('../src/validation');
 
 jest.mock('../src/storage', () => () => ({
   setItem: jest.fn(),
   getItem: jest.fn(),
+  multiSet: jest.fn(),
+  multiGet: jest.fn(),
 }));
 jest.mock('../src/validation');
 jest.mock('@react-native-community/async-storage');
@@ -91,6 +96,43 @@ describe('createGetter', () => {
     it('calls `getItem` of wrappedAsyncStorage inside', async () => {
       await getter();
       expect(wrappedAsyncStorage.getItem).toBeCalledWith(key);
+    });
+  });
+});
+
+describe('createMultiSetter', () => {
+  const multiSetter = createMultiSetter(storageName, wrappedAsyncStorage, schema);
+
+  it('returns multiSetter function', () => {
+    expect(multiSetter).toEqual(expect.any(Function));
+  });
+
+  describe('returned multiSetter function', () => {
+    const testData = 'some data';
+    beforeAll(async () => {
+      await multiSetter(testData);
+    });
+
+    it('calls `validate` inside', () => {
+      expect(validate).toHaveBeenCalled();
+    });
+
+    it('calls `multiSet` of wrappedAsyncStorage inside', () => {
+      expect(wrappedAsyncStorage.multiSet).toBeCalledWith(testData);
+    });
+  });
+});
+
+describe('createMultiGetter', () => {
+  const multiGetter = createMultiGetter(wrappedAsyncStorage);
+
+  it('returns multiGetter function', () => {
+    expect(multiGetter).toEqual(expect.any(Function));
+  });
+
+  describe('returned multiGetter function', () => {
+    it('calls `multiGet` of wrappedAsyncStorage inside', () => {
+      expect(wrappedAsyncStorage.multiSet).toBeCalled();
     });
   });
 });
