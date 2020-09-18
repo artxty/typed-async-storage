@@ -16,7 +16,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "coverage": "jest --collect-coverage"
   },
   "author": "Artur Ty",
   "license": "MIT License",
