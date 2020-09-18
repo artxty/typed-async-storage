@@ -23,11 +23,6 @@ const createSetter = (storageName, storage, key, schemaSegment) => {
   };
 };
 
-const createMultiSetter = (storageName, storage, schema) => async (object) => {
-  validate(storageName, { [storageName]: schema }, { [storageName]: object });
-  await storage.multiSet(object);
-};
-
 const createMethods = (schema, storageName, storage) => {
   let methods = {};
   Object.keys(schema).forEach((key) => {
@@ -40,9 +35,16 @@ const createMethods = (schema, storageName, storage) => {
   return methods;
 };
 
+const createMultiSetter = (storageName, storage, schema) => async (object) => {
+  validate(storageName, { [storageName]: schema }, { [storageName]: object });
+  await storage.multiSet(object);
+};
+
+const createMultiGetter = (storage) => (keys = []) => storage.multiGet(keys);
+
 const createMultiMethods = (schema, storageName, storage) => {
   const methods = {
-    get: (keys = []) => storage.multiGet(keys),
+    get: createMultiGetter(storage),
     set: createMultiSetter(storageName, storage, schema),
   };
 
@@ -71,5 +73,11 @@ const createStorage = ({
 };
 
 module.exports = {
-  createStorage, createMethods, createGetter, createSetter, createMultiSetter, createMultiMethods,
+  createStorage,
+  createMethods,
+  createGetter,
+  createSetter,
+  createMultiSetter,
+  createMultiGetter,
+  createMultiMethods,
 };
