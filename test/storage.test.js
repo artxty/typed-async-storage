@@ -1,5 +1,5 @@
 const AsyncStorage = require('@react-native-community/async-storage');
-const createAsyncStorage = require('../src/storage');
+const wrapAsyncStorage = require('../src/storage');
 const { getFullKey } = require('../src/helpers');
 
 const dummyData = {
@@ -12,18 +12,29 @@ const dummyData = {
   test4: 42,
 };
 
-describe('createAsyncStorage', () => {
+const dummyObject = {
+  key1: {
+    a: 1,
+    b: true,
+  },
+  key2: {
+    a: 2,
+    b: false,
+  },
+};
+
+describe('wrapAsyncStorage', () => {
   const storageName = 'testStorage';
-  const asyncStorage = createAsyncStorage(storageName, AsyncStorage);
+  const wrappedAsyncStorage = wrapAsyncStorage(storageName, AsyncStorage);
 
   it('returns an object containing a list of functions (wrappers)', () => {
-    const values = Object.values(asyncStorage);
+    const values = Object.values(wrappedAsyncStorage);
 
     expect(values.every((i) => typeof i === 'function')).toBeTruthy();
   });
 
   describe('setItem', () => {
-    const { setItem } = asyncStorage;
+    const { setItem } = wrappedAsyncStorage;
     it('calls original AsyncStorage.setItem with a fullKey and stringified data', async () => {
       const key = 'testKey';
       const fullKey = getFullKey(storageName, key);
@@ -36,7 +47,7 @@ describe('createAsyncStorage', () => {
   });
 
   describe('getItem', () => {
-    const { getItem } = asyncStorage;
+    const { getItem } = wrappedAsyncStorage;
     it('calls original AsyncStorage.getItem with a fullKey', async () => {
       const key = 'testKey';
       const fullKey = getFullKey(storageName, key);
@@ -52,6 +63,33 @@ describe('createAsyncStorage', () => {
       const data = await getItem(key);
 
       expect(data).toEqual(dummyData);
+    });
+  });
+
+  describe('multiSet', () => {
+    const { multiSet } = wrappedAsyncStorage;
+
+    it('calls original AsyncStorage.multiSet with prepared pairs [fullKey, stringifiedValue] of data', async () => {
+      await multiSet(dummyObject);
+      expect(AsyncStorage.multiSet).toBeCalledWith(expect.any(Array));
+    });
+  });
+
+  describe('multiGet', () => {
+    const { multiGet } = wrappedAsyncStorage;
+    const keys = ['key1', 'key2'];
+
+    it('calls original AsyncStorage.multiGet with an array of fullKeys', async () => {
+      await multiGet(keys);
+
+      const fullKeys = keys.map((key) => getFullKey(storageName, key));
+      expect(AsyncStorage.multiGet).toBeCalledWith(fullKeys);
+    });
+
+    it('returns parsed data', async () => {
+      const data = await multiGet(keys);
+
+      expect(data).toEqual(dummyObject);
     });
   });
 });
