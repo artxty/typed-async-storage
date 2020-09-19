@@ -2,7 +2,7 @@
 
 # typed-async-storage
 
-A tiny library-wrapper for [AsyncStorage](https://github.com/react-native-community/async-storage) that allows you to create schema-based storage using [PropTypes](https://www.npmjs.com/package/prop-types)
+A tiny wrapper for [AsyncStorage](https://github.com/react-native-community/async-storage) that allows creating schema-based storage and validation using [PropTypes](https://www.npmjs.com/package/prop-types) 
 
 ## Installation
 
