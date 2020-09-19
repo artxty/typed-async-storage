@@ -11,42 +11,78 @@ npm install --save typed-async-storage
 ```
 
 ## Usage
-Import the package
+Import the package and *AsyncStorage* and *PropTypes* as well
 ```js
 import createStorage from 'typed-async-storage';
-```
-
-Import *AsyncStorage* and *PropTypes* as well
-```js
 import AsyncStorage from '@react-native-community/async-storage';
 import PropTypes from 'prop-types';
 ```
 
-Use your old friend *PropTypes* to create a schema
+### Simple storage
+To create a simple storage (single storage) use your old friend *PropTypes* to create a schema
 ```js
-const schema = {
+const simpleSchema = {
   greetingText: PropTypes.string.isRequired,
   darkMode: PropTypes.bool.isRequired,
 };
 ```
 
-Pass to *createStorage* three params: storage name, schema, and *AsyncStorage*
+Call *createStorage* and pass these required params: storage name, schema, and *AsyncStorage*
 ```js
-const storageName = 'myStorage';
-const myStorage = createStorage(storageName, schema, AsyncStorage);
+const simpleStorage = createStorage({
+  name: 'simpleStorage', // name must be unique for every storage
+  schema: simpleSchema,
+  AsyncStorage,
+});
 ```
 
-Now you have dynamically created setters and getters to interact with the storage
+Now you have dynamically created setters and getters to interact with your 'simpleStorage' and *PropTypes* validation out of the box!
 ```js
-await myStorage.setGreetingText('Hello word');
-await myStorage.setDarkMode(true);
-
-const text = await myStorage.getGreetingText();
-console.log(text); // prints 'Hello word'
-
-const isDarkMode = await myStorage.getDarkMode();
+await simpleStorage.setDarkMode(true);
+const isDarkMode = await simpleStorage.getDarkMode();
 console.log(isDarkMode); // prints 'true'
+
+await simpleStorage.setGreetingText(42);
+// TypeError: Invalid property `greetingText` of type `number` supplied to `simpleStorage`, expected `string`.
 ```
+
+### Multiple Storage
+To deal with sets you have to wrap your schema in PropTypes.objectOf(), check next example.
+```js
+// Or you can use PropTypes.objectOf(PropTypes.shape({ ... }))
+const usersSchema = PropTypes.objectOf(PropTypes.exact({
+  name: PropTypes.string.isRequired,
+  address: PropTypes.string.isRequired,
+  birthDate: PropTypes.instanceOf(Date).isRequired,
+}));
+
+const usersStorage = createStorage({
+  name: 'usersStorage',
+  schema: usersSchema,
+  AsyncStorage,
+  isMultiple: true, // pass 'true' to a create multiple storage
+});
+
+await usersStorage.set({ // pass an object {key: data, ...} of items
+  user1: {
+    name: 'Bob',
+    address: '42 12th Street',
+    birthDate: new Date(2020, 1, 1),
+  },
+  user2: {
+    name: 'Mike',
+    address: '1 Main Street',
+    birthDate: new Date(2019, 1, 1),
+  },
+});
+
+// pass an array of keys you want to get
+await usersStorage.get(['user1', 'user2']);
+
+```
+
+## Note
+To make things simple, try to create storages as small as possible. For each group of items create a new storage (users, settings, channels, etc.). Do **not** create a master storage that contains all the data of your application, it is **impossible** to deal with it using this package. Break it down into several small storages.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
