@@ -64,31 +64,26 @@ describe('parseErrorMessages', () => {
 
 describe('validateSchema', () => {
   const invalidSchema = {
-    storage: {
-      name: PropTypes.string.isRequired,
-      data: {
-        isIt: PropTypes.bool.isRequired,
-        value: PropTypes.number.isRequired,
-      },
+    name: PropTypes.string.isRequired,
+    data: {
+      isIt: PropTypes.bool.isRequired,
+      value: PropTypes.number.isRequired,
     },
-
   };
   const validSchema = {
-    schema: {
-      name: PropTypes.string.isRequired,
-      data: PropTypes.exact({
-        isIt: PropTypes.bool.isRequired,
-        value: PropTypes.number.isRequired,
-      }),
-    },
+    name: PropTypes.string.isRequired,
+    data: PropTypes.exact({
+      isIt: PropTypes.bool.isRequired,
+      value: PropTypes.number.isRequired,
+    }),
   };
 
   it('throw an error if one of the schema properties is not instance of PropTypes', () => {
-    expect(() => validateSchema(invalidSchema)).toThrow('it must be a function');
+    expect(() => validateSchema('testStorage', invalidSchema)).toThrow('it must be a function');
   });
 
   it('does not throw an error if get a valid schema', () => {
-    expect(() => validateSchema(validSchema)).not.toThrow('it must be a function');
+    expect(() => validateSchema('testStorage', validSchema)).not.toThrow('it must be a function');
   });
 });
 
