@@ -3,8 +3,6 @@ const PropTypes = require('prop-types/prop-types');
 const {
   createStorage,
   createMethods,
-  createSetter,
-  createGetter,
   createMultiSetter,
   createMultiGetter,
 } = require('../src/createStorage');
@@ -32,39 +30,17 @@ const schema = {
 describe('createMethods', () => {
   const methods = createMethods(schema, storageName, wrappedAsyncStorage);
 
-  it('returns an object containing setters for each property of a schema', () => {
+  it('return methods', () => {
     expect(methods).toEqual(expect.objectContaining({
-      setAge: expect.any(Function),
-      setName: expect.any(Function),
+      set: expect.any(Function),
+      get: expect.any(Function),
     }));
   });
 
-  it('returns an object containing getters for each property of a schema', () => {
-    expect(methods).toEqual(expect.objectContaining({
-      getAge: expect.any(Function),
-      getName: expect.any(Function),
-    }));
-  });
-});
-
-describe('createSetter', () => {
-  const key = 'dataKey';
-  const setterObj = createSetter(storageName, wrappedAsyncStorage, key, schema);
-
-  it('returns an object with only one key - setter name', () => {
-    const setterName = 'setDataKey';
-    expect(Object.keys(setterObj)).toEqual([setterName]);
-  });
-
-  it('return an object with only one value - setter function', () => {
-    expect(Object.values(setterObj)).toEqual([expect.any(Function)]);
-  });
-
-  describe('returned setter function', () => {
-    const testData = 'some data';
+  describe('`set` method', () => {
+    const data = 'Nick';
     beforeAll(async () => {
-      const [setter] = Object.values(setterObj);
-      await setter(testData);
+      await methods.set('name', data);
     });
 
     it('calls `validate` inside', () => {
@@ -72,30 +48,14 @@ describe('createSetter', () => {
     });
 
     it('calls `setItem` of wrappedAsyncStorage inside', () => {
-      expect(wrappedAsyncStorage.setItem).toBeCalledWith(key, testData);
+      expect(wrappedAsyncStorage.setItem).toBeCalledWith('name', data);
     });
   });
-});
 
-describe('createGetter', () => {
-  const key = 'dataKey';
-  const getterObj = createGetter(wrappedAsyncStorage, key, schema);
-
-  it('returns an object with only one key - getter name', () => {
-    const getterKey = 'getDataKey';
-    expect(Object.keys(getterObj)).toEqual([getterKey]);
-  });
-
-  it('return an object with only one value - getter function', () => {
-    expect(Object.values(getterObj)).toEqual([expect.any(Function)]);
-  });
-
-  describe('returned getter function', () => {
-    const [getter] = Object.values(getterObj);
-
+  describe('"get" method', () => {
     it('calls `getItem` of wrappedAsyncStorage inside', async () => {
-      await getter();
-      expect(wrappedAsyncStorage.getItem).toBeCalledWith(key);
+      await methods.get('name');
+      expect(wrappedAsyncStorage.getItem).toBeCalledWith('name');
     });
   });
 });
