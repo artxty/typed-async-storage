@@ -1,39 +1,24 @@
 const { validate, validateSchema } = require('./validation');
-const { capitalize } = require('./helpers');
 const wrapAsyncStorage = require('./storage');
 
-const createGetter = (storage, key) => {
-  const capitalizedKey = capitalize(key);
-  const getterName = `get${capitalizedKey}`;
-  return {
-    [getterName]: async () => storage.getItem(key),
-  };
+const checkKey = (schema, key) => {
+  const schemaKeys = Object.keys(schema);
+  if (!schemaKeys.includes(key)) {
+    throw new Error(`Invalid key (${key}). Valid keys: [${schemaKeys}]`);
+  }
 };
 
-const createSetter = (storageName, storage, key, schemaSegment) => {
-  const capitalizedKey = capitalize(key);
-  const setterName = `set${capitalizedKey}`;
-  const subSchema = { [key]: schemaSegment };
-
-  return {
-    [setterName]: async (data) => {
-      validate(storageName, subSchema, { [key]: data });
-      await storage.setItem(key, data);
-    },
-  };
-};
-
-const createMethods = (schema, storageName, storage) => {
-  let methods = {};
-  Object.keys(schema).forEach((key) => {
-    methods = {
-      ...methods,
-      ...createSetter(storageName, storage, key, schema[key]),
-      ...createGetter(storage, key),
-    };
-  });
-  return methods;
-};
+const createMethods = (schema, storageName, storage) => ({
+  get: async (key) => {
+    checkKey(schema, key);
+    return storage.getItem(key);
+  },
+  set: async (key, data) => {
+    checkKey(schema, key);
+    validate(storageName, { [key]: schema[key] }, { [key]: data });
+    return storage.setItem(key, data);
+  },
+});
 
 const createMultiSetter = (storageName, storage, schema) => async (object) => {
   validate(storageName, { [storageName]: schema }, { [storageName]: object });
@@ -75,8 +60,6 @@ const createStorage = ({
 module.exports = {
   createStorage,
   createMethods,
-  createGetter,
-  createSetter,
   createMultiSetter,
   createMultiGetter,
   createMultiMethods,
