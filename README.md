@@ -36,13 +36,13 @@ const simpleStorage = createStorage({
 });
 ```
 
-Now you have dynamically created setters and getters to interact with your 'simpleStorage' and *PropTypes* validation out of the box!
+Now you can interact with your 'simpleStorage' and have *PropTypes* validation out of the box!
 ```js
-await simpleStorage.setDarkMode(true);
-const isDarkMode = await simpleStorage.getDarkMode();
+await simpleStorage.set('darkMode', true);
+const isDarkMode = await simpleStorage.get('darkMode');
 console.log(isDarkMode); // prints 'true'
 
-await simpleStorage.setGreetingText(42);
+await simpleStorage.set('greetingText', 42);
 // TypeError: Invalid property `greetingText` of type `number` supplied to `simpleStorage`, expected `string`.
 ```
 
