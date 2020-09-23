@@ -1,14 +1,7 @@
 const {
   getShortKey,
-  capitalize,
   getFullKey,
 } = require('../src/helpers');
-
-test('capitalize', () => {
-  const string = 'hello world';
-  const capitalizedString = 'Hello world';
-  expect(capitalize(string)).toBe(capitalizedString);
-});
 
 test('getFullKey', () => {
   const storageName = 'settingsStorage';
