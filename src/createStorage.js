@@ -23,6 +23,10 @@ const createMethods = (schema, storageName, storage) => ({
     validate(storageName, { [key]: schema[key] }, { [key]: data });
     return storage.mergeItem(key, data);
   },
+  remove: async (key) => {
+    checkKey(schema, key);
+    return storage.removeItem(key);
+  },
 });
 
 const createMultiSetter = (storageName, storage, schema) => async (object) => {

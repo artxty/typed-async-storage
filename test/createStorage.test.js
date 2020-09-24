@@ -14,6 +14,7 @@ jest.mock('../src/storage', () => () => ({
   setItem: jest.fn(),
   getItem: jest.fn(),
   mergeItem: jest.fn(),
+  removeItem: jest.fn(),
   multiSet: jest.fn(),
   multiGet: jest.fn(),
 }));
@@ -78,6 +79,13 @@ describe('createMethods', () => {
     it('calls `mergeItem` inside wrappedAsyncStorage', async () => {
       await methods.merge('name', data);
       expect(wrappedAsyncStorage.mergeItem).toBeCalledWith('name', data);
+    });
+  });
+
+  describe('"remove" method', () => {
+    it('calls `removeItem` inside wrappedAsyncStorage', async () => {
+      await methods.remove('name');
+      expect(wrappedAsyncStorage.removeItem).toBeCalledWith('name');
     });
   });
 });

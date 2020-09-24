@@ -80,6 +80,18 @@ describe('wrapAsyncStorage', () => {
     });
   });
 
+  describe('removeItem', () => {
+    const { removeItem } = wrappedAsyncStorage;
+    it('calls original AsyncStorage.removeItem with a fullKey', async () => {
+      const key = 'testKey';
+      const fullKey = getFullKey(storageName, key);
+
+      await removeItem(key);
+
+      expect(AsyncStorage.removeItem).toBeCalledWith(fullKey);
+    });
+  });
+
   describe('multiSet', () => {
     const { multiSet } = wrappedAsyncStorage;
 
