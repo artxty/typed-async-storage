@@ -11,6 +11,7 @@ const wrapAsyncStorage = require('../src/storage');
 const { validate, validateSchema } = require('../src/validation');
 
 jest.mock('../src/storage', () => () => ({
+  getAllKeys: jest.fn(),
   setItem: jest.fn(),
   getItem: jest.fn(),
   mergeItem: jest.fn(),
@@ -42,6 +43,13 @@ describe('createMethods', () => {
       set: expect.any(Function),
       get: expect.any(Function),
     }));
+  });
+
+  describe('`getAllKeys` method', () => {
+    it('calls `getAllKeys` inside wrappedAsyncStorage', async () => {
+      await methods.getAllKeys();
+      expect(wrappedAsyncStorage.getAllKeys).toHaveBeenCalled();
+    });
   });
 
   describe('`set` method', () => {

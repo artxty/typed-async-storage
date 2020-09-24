@@ -33,6 +33,26 @@ describe('wrapAsyncStorage', () => {
     expect(values.every((i) => typeof i === 'function')).toBeTruthy();
   });
 
+  describe('getAllKeys', () => {
+    const { getAllKeys } = wrappedAsyncStorage;
+    it('calls original AsyncStorage.getAllKeys', async () => {
+      await getAllKeys();
+
+      expect(AsyncStorage.getAllKeys).toBeCalledWith();
+    });
+
+    it('Returns all keys known to the specific storage', async () => {
+      const anotherStorage = wrapAsyncStorage('anotherStorage', AsyncStorage);
+      await anotherStorage.setItem('key1', 1);
+      await anotherStorage.setItem('key2', 2);
+      await wrappedAsyncStorage.setItem('testKey1', 10);
+
+      const testStorageKeys = await wrappedAsyncStorage.getAllKeys();
+
+      expect(testStorageKeys).toEqual(['testKey1']);
+    });
+  });
+
   describe('setItem', () => {
     const { setItem } = wrappedAsyncStorage;
     it('calls original AsyncStorage.setItem with a fullKey and stringified data', async () => {

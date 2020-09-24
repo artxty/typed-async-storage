@@ -1,6 +1,18 @@
 const { getFullKey, getShortKey } = require('./helpers');
 
 module.exports = function wrapAsyncStorage(name, AsyncStorage) {
+  const getAllKeys = async () => {
+    try {
+      const storagePrefix = getFullKey(name, '');
+      const allKeys = await AsyncStorage.getAllKeys();
+      return allKeys
+        .filter((key) => key.startsWith(storagePrefix))
+        .map((key) => getShortKey(name, key));
+    } catch (e) {
+      throw new Error(e);
+    }
+  };
+
   const setItem = async (key = '', value = null) => {
     try {
       const fullKey = getFullKey(name, key);
@@ -68,6 +80,7 @@ module.exports = function wrapAsyncStorage(name, AsyncStorage) {
   };
 
   return {
+    getAllKeys,
     getItem,
     setItem,
     mergeItem,

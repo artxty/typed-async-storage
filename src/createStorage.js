@@ -27,6 +27,7 @@ const createMethods = (schema, storageName, storage) => ({
     checkKey(schema, key);
     return storage.removeItem(key);
   },
+  getAllKeys: async () => storage.getAllKeys(),
 });
 
 const createMultiSetter = (storageName, storage, schema) => async (object) => {
@@ -40,6 +41,7 @@ const createMultiMethods = (schema, storageName, storage) => {
   const methods = {
     get: createMultiGetter(storage),
     set: createMultiSetter(storageName, storage, schema),
+    getAllKeys: async () => storage.getAllKeys(),
   };
 
   return methods;
