@@ -13,11 +13,17 @@ const { validate, validateSchema } = require('../src/validation');
 jest.mock('../src/storage', () => () => ({
   setItem: jest.fn(),
   getItem: jest.fn(),
+  mergeItem: jest.fn(),
   multiSet: jest.fn(),
   multiGet: jest.fn(),
 }));
-jest.mock('../src/validation');
+
 jest.mock('@react-native-community/async-storage');
+
+jest.mock('../src/validation');
+afterEach(() => {
+  validate.mockClear();
+});
 
 const storageName = 'testStorage';
 const wrappedAsyncStorage = wrapAsyncStorage();
@@ -56,6 +62,22 @@ describe('createMethods', () => {
     it('calls `getItem` of wrappedAsyncStorage inside', async () => {
       await methods.get('name');
       expect(wrappedAsyncStorage.getItem).toBeCalledWith('name');
+    });
+  });
+
+  describe('"merge" method', () => {
+    const data = 'Nick';
+    beforeAll(async () => {
+      await methods.merge('name', data);
+    });
+
+    it('calls `validate` inside', () => {
+      expect(validate).toHaveBeenCalled();
+    });
+
+    it('calls `mergeItem` inside wrappedAsyncStorage', async () => {
+      await methods.merge('name', data);
+      expect(wrappedAsyncStorage.mergeItem).toBeCalledWith('name', data);
     });
   });
 });

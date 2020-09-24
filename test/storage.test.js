@@ -66,6 +66,20 @@ describe('wrapAsyncStorage', () => {
     });
   });
 
+  describe('mergeItem', () => {
+    const { mergeItem } = wrappedAsyncStorage;
+
+    it('calls original AsyncStorage.mergeItem with a fullKey and stringified data', async () => {
+      const key = 'testKey';
+      const data = { test1: [0, 0, 0] };
+      const fullKey = getFullKey(storageName, key);
+
+      await mergeItem(key, data);
+
+      expect(AsyncStorage.mergeItem).toBeCalledWith(fullKey, JSON.stringify(data));
+    });
+  });
+
   describe('multiSet', () => {
     const { multiSet } = wrappedAsyncStorage;
 
