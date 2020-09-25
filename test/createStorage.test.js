@@ -20,6 +20,7 @@ jest.mock('../src/storage', () => () => ({
   multiSet: jest.fn(),
   multiGet: jest.fn(),
   multiMerge: jest.fn(),
+  multiRemove: jest.fn(),
 }));
 
 jest.mock('@react-native-community/async-storage');
@@ -158,6 +159,13 @@ describe('createMultiMethods', () => {
     it('calls `mergeItem` inside wrappedAsyncStorage', async () => {
       await multiMethods.merge(data);
       expect(wrappedAsyncStorage.multiMerge).toBeCalledWith(data);
+    });
+  });
+
+  describe('remove', () => {
+    it('calls `multiRemove` inside wrappedAsyncStorage', async () => {
+      await multiMethods.remove(['key1', 'key2']);
+      expect(wrappedAsyncStorage.multiRemove).toBeCalledWith(['key1', 'key2']);
     });
   });
 });
