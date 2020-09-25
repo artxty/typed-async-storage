@@ -45,6 +45,7 @@ const createMultiMethods = (schema, storageName, storage) => {
       validate(storageName, { [storageName]: schema }, { [storageName]: object });
       await storage.multiMerge(object);
     },
+    remove: async (keys) => storage.multiRemove(keys),
     getAllKeys: async () => storage.getAllKeys(),
   };
 

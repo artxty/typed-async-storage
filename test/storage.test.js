@@ -147,4 +147,16 @@ describe('wrapAsyncStorage', () => {
       expect(AsyncStorage.multiMerge).toBeCalledWith(expect.any(Array));
     });
   });
+
+  describe('multiRemove', () => {
+    const { multiRemove } = wrappedAsyncStorage;
+    const keys = ['key1', 'key2'];
+
+    it('calls original AsyncStorage.multiRemove with an array of fullKeys', async () => {
+      await multiRemove(keys);
+      const fullKeys = keys.map((key) => getFullKey(storageName, key));
+
+      expect(AsyncStorage.multiRemove).toBeCalledWith(fullKeys);
+    });
+  });
 });
