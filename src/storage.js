@@ -100,6 +100,11 @@ module.exports = function wrapAsyncStorage(name, AsyncStorage) {
     }
   };
 
+  const clear = async () => {
+    const allKeys = await getAllKeys();
+    await multiRemove(allKeys);
+  };
+
   return {
     getAllKeys,
     getItem,
@@ -110,5 +115,6 @@ module.exports = function wrapAsyncStorage(name, AsyncStorage) {
     multiSet,
     multiMerge,
     multiRemove,
+    clear,
   };
 };
