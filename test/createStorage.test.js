@@ -156,7 +156,7 @@ describe('createMultiMethods', () => {
       expect(validate).toHaveBeenCalled();
     });
 
-    it('calls `mergeItem` inside wrappedAsyncStorage', async () => {
+    it('calls `multiMerge` inside wrappedAsyncStorage', async () => {
       await multiMethods.merge(data);
       expect(wrappedAsyncStorage.multiMerge).toBeCalledWith(data);
     });
