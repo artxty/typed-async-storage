@@ -28,6 +28,7 @@ const createMethods = (schema, storageName, storage) => ({
     return storage.removeItem(key);
   },
   getAllKeys: async () => storage.getAllKeys(),
+  clear: async () => storage.clear(),
 });
 
 const createMultiSetter = (storageName, storage, schema) => async (object) => {
@@ -47,12 +48,12 @@ const createMultiMethods = (schema, storageName, storage) => {
     },
     remove: async (keys) => storage.multiRemove(keys),
     getAllKeys: async () => storage.getAllKeys(),
+    clear: async () => storage.clear(),
   };
 
   return methods;
 };
 
-/* Add 'clear' function */
 const createStorage = ({
   schema,
   name,

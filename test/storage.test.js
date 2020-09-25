@@ -159,4 +159,17 @@ describe('wrapAsyncStorage', () => {
       expect(AsyncStorage.multiRemove).toBeCalledWith(fullKeys);
     });
   });
+
+  describe('clear', () => {
+    const { multiSet, getAllKeys, clear } = wrappedAsyncStorage;
+
+    it('removes whole specific storage data', async () => {
+      await multiSet({ key1: 1, key2: 2, key3: 3 });
+
+      await clear();
+
+      const storageKeys = await getAllKeys();
+      expect(storageKeys).toEqual([]);
+    });
+  });
 });
