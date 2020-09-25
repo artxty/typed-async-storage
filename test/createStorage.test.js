@@ -3,6 +3,7 @@ const PropTypes = require('prop-types/prop-types');
 const {
   createStorage,
   createMethods,
+  createMultiMethods,
   createMultiSetter,
   createMultiGetter,
 } = require('../src/createStorage');
@@ -18,6 +19,7 @@ jest.mock('../src/storage', () => () => ({
   removeItem: jest.fn(),
   multiSet: jest.fn(),
   multiGet: jest.fn(),
+  multiMerge: jest.fn(),
 }));
 
 jest.mock('@react-native-community/async-storage');
@@ -131,6 +133,31 @@ describe('createMultiGetter', () => {
   describe('returned multiGetter function', () => {
     it('calls `multiGet` of wrappedAsyncStorage inside', () => {
       expect(wrappedAsyncStorage.multiSet).toBeCalled();
+    });
+  });
+});
+
+describe('createMultiMethods', () => {
+  const multiSchema = PropTypes.objectOf(PropTypes.exact({
+    a: PropTypes.number.isRequired,
+    b: PropTypes.string,
+  }));
+
+  const multiMethods = createMultiMethods(multiSchema, 'testMultiStorage', wrappedAsyncStorage);
+
+  describe('merge', () => {
+    const data = { key: { a: 1 } };
+    beforeAll(async () => {
+      await multiMethods.merge(data);
+    });
+
+    it('calls `validate` inside', () => {
+      expect(validate).toHaveBeenCalled();
+    });
+
+    it('calls `mergeItem` inside wrappedAsyncStorage', async () => {
+      await multiMethods.merge(data);
+      expect(wrappedAsyncStorage.multiMerge).toBeCalledWith(data);
     });
   });
 });

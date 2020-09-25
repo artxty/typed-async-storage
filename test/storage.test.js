@@ -138,4 +138,13 @@ describe('wrapAsyncStorage', () => {
       expect(data).toEqual(dummyObject);
     });
   });
+
+  describe('multiMerge', () => {
+    const { multiMerge } = wrappedAsyncStorage;
+
+    it('calls original AsyncStorage.multiMerge with prepared pairs [fullKey, stringifiedValue] of data', async () => {
+      await multiMerge(dummyObject);
+      expect(AsyncStorage.multiMerge).toBeCalledWith(expect.any(Array));
+    });
+  });
 });
