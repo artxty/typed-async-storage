@@ -84,6 +84,55 @@ await usersStorage.get(['user1', 'user2']);
 ## Note
 To make things simple, try to create storages as small as possible. For each group of items create a new storage (users, settings, channels, etc.). Do **not** create a master storage that contains all the data of your application, it is **impossible** to deal with it using this package. Break it down into several small storages.
 
+## API
+API is built over [AsyncStorage API](https://react-native-community.github.io/async-storage/docs/api)
+### Simple Storage
+```js
+// Sets value for a specific key
+set('myKey1', { a: 1, b: 'text' })
+
+// Gets value for a specific key
+get('myKey1')
+
+// Merges an existing value stored under 'key', with new 'value'
+merge('myKey1', { b: 'test' }) // Check how it works: https://react-native-community.github.io/async-storage/docs/api#mergeitem
+
+// Removes all data for myKey1
+remove('myKey1')
+
+// Returns all keys for a specific storage
+getAllKeys()
+
+// Removes all data for all keys in a specific storage
+clear()
+```
+### Multiple Storage
+```js
+// Sets values for specific keys
+set({
+  key1: { a: 1, b: 'string' },
+  key2: { a: 2, b: 'string1' },
+})
+
+// Gets values for specific keys
+get(['key1', 'key2'])
+
+// Multiple merging of existing and new values in a batch
+merge({
+  key1: { a: 5,},
+  key2: { b: 'str' },
+})
+
+// Removes all data for key1 and key2
+remove(['key1', 'key2'])
+
+// Returns all keys for a specific storage
+getAllKeys()
+
+// Removes all data for all keys in a specific storage
+clear()
+```
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
