@@ -79,6 +79,17 @@ module.exports = function wrapAsyncStorage(name, AsyncStorage) {
     }
   };
 
+  const multiMerge = async (dataObject = {}) => {
+    try {
+      const pairs = Object
+        .entries(dataObject)
+        .map(([key, value]) => [getFullKey(name, key), JSON.stringify(value)]);
+      await AsyncStorage.multiMerge(pairs);
+    } catch (e) {
+      throw new Error(e);
+    }
+  };
+
   return {
     getAllKeys,
     getItem,
@@ -87,5 +98,6 @@ module.exports = function wrapAsyncStorage(name, AsyncStorage) {
     removeItem,
     multiGet,
     multiSet,
+    multiMerge,
   };
 };

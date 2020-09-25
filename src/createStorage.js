@@ -41,6 +41,10 @@ const createMultiMethods = (schema, storageName, storage) => {
   const methods = {
     get: createMultiGetter(storage),
     set: createMultiSetter(storageName, storage, schema),
+    merge: async (object) => {
+      validate(storageName, { [storageName]: schema }, { [storageName]: object });
+      await storage.multiMerge(object);
+    },
     getAllKeys: async () => storage.getAllKeys(),
   };
 
