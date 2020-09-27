@@ -1,5 +1,5 @@
 const { validate, validateSchema, validateKey } = require('./validation');
-const wrapAsyncStorage = require('./storage');
+const wrapAsyncStorage = require('./storageWrapper');
 
 const createMethods = (schema, storageName, storage) => ({
   get: async (key) => {

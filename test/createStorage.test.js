@@ -6,10 +6,10 @@ const {
   createMultiMethods,
 } = require('../src/createStorage');
 
-const wrapAsyncStorage = require('../src/storage');
+const wrapAsyncStorage = require('../src/storageWrapper');
 const { validate, validateSchema } = require('../src/validation');
 
-jest.mock('../src/storage', () => () => ({
+jest.mock('../src/storageWrapper', () => () => ({
   getAllKeys: jest.fn(),
   setItem: jest.fn(),
   getItem: jest.fn(),

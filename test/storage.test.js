@@ -1,5 +1,5 @@
 const AsyncStorage = require('@react-native-community/async-storage');
-const wrapAsyncStorage = require('../src/storage');
+const wrapAsyncStorage = require('../src/storageWrapper');
 const { getFullKey } = require('../src/helpers');
 
 const dummyData = {
