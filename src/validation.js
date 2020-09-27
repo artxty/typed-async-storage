@@ -56,6 +56,13 @@ const validateSchema = (storageName, schema, isMultiple) => {
   }
 };
 
+const checkKey = (schema, key) => {
+  const schemaKeys = Object.keys(schema);
+  if (!schemaKeys.includes(key)) {
+    throw new Error(`Invalid key (${key}). Valid keys: [${schemaKeys}]`);
+  }
+};
+
 module.exports = {
-  validate, validateSchema, parseErrorMessages, getMatchByRegexp,
+  validate, validateSchema, parseErrorMessages, getMatchByRegexp, checkKey,
 };

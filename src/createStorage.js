@@ -1,12 +1,5 @@
-const { validate, validateSchema } = require('./validation');
+const { validate, validateSchema, checkKey } = require('./validation');
 const wrapAsyncStorage = require('./storage');
-
-const checkKey = (schema, key) => {
-  const schemaKeys = Object.keys(schema);
-  if (!schemaKeys.includes(key)) {
-    throw new Error(`Invalid key (${key}). Valid keys: [${schemaKeys}]`);
-  }
-};
 
 const createMethods = (schema, storageName, storage) => ({
   get: async (key) => {
