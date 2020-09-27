@@ -31,28 +31,20 @@ const createMethods = (schema, storageName, storage) => ({
   clear: async () => storage.clear(),
 });
 
-const createMultiSetter = (storageName, storage, schema) => async (object) => {
-  validate(storageName, { [storageName]: schema }, { [storageName]: object });
-  await storage.multiSet(object);
-};
-
-const createMultiGetter = (storage) => (keys = []) => storage.multiGet(keys);
-
-const createMultiMethods = (schema, storageName, storage) => {
-  const methods = {
-    get: createMultiGetter(storage),
-    set: createMultiSetter(storageName, storage, schema),
-    merge: async (object) => {
-      validate(storageName, { [storageName]: schema }, { [storageName]: object });
-      await storage.multiMerge(object);
-    },
-    remove: async (keys) => storage.multiRemove(keys),
-    getAllKeys: async () => storage.getAllKeys(),
-    clear: async () => storage.clear(),
-  };
-
-  return methods;
-};
+const createMultiMethods = (schema, storageName, storage) => ({
+  get: async (keys) => storage.multiGet(keys),
+  set: async (object) => {
+    validate(storageName, { [storageName]: schema }, { [storageName]: object });
+    await storage.multiSet(object);
+  },
+  merge: async (object) => {
+    validate(storageName, { [storageName]: schema }, { [storageName]: object });
+    await storage.multiMerge(object);
+  },
+  remove: async (keys) => storage.multiRemove(keys),
+  getAllKeys: async () => storage.getAllKeys(),
+  clear: async () => storage.clear(),
+});
 
 const createStorage = ({
   schema,
@@ -77,7 +69,5 @@ const createStorage = ({
 module.exports = {
   createStorage,
   createMethods,
-  createMultiSetter,
-  createMultiGetter,
   createMultiMethods,
 };
