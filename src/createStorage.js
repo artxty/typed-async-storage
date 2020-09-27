@@ -1,23 +1,23 @@
-const { validate, validateSchema, checkKey } = require('./validation');
+const { validate, validateSchema, validateKey } = require('./validation');
 const wrapAsyncStorage = require('./storage');
 
 const createMethods = (schema, storageName, storage) => ({
   get: async (key) => {
-    checkKey(schema, key);
+    validateKey(schema, key);
     return storage.getItem(key);
   },
   set: async (key, data) => {
-    checkKey(schema, key);
+    validateKey(schema, key);
     validate(storageName, { [key]: schema[key] }, { [key]: data });
     return storage.setItem(key, data);
   },
   merge: async (key, data) => {
-    checkKey(schema, key);
+    validateKey(schema, key);
     validate(storageName, { [key]: schema[key] }, { [key]: data });
     return storage.mergeItem(key, data);
   },
   remove: async (key) => {
-    checkKey(schema, key);
+    validateKey(schema, key);
     return storage.removeItem(key);
   },
   getAllKeys: async () => storage.getAllKeys(),
