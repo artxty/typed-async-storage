@@ -4,8 +4,6 @@ const {
   createStorage,
   createMethods,
   createMultiMethods,
-  createMultiSetter,
-  createMultiGetter,
 } = require('../src/createStorage');
 
 const wrapAsyncStorage = require('../src/storage');
@@ -101,43 +99,6 @@ describe('createMethods', () => {
   });
 });
 
-describe('createMultiSetter', () => {
-  const multiSetter = createMultiSetter(storageName, wrappedAsyncStorage, schema);
-
-  it('returns multiSetter function', () => {
-    expect(multiSetter).toEqual(expect.any(Function));
-  });
-
-  describe('returned multiSetter function', () => {
-    const testData = 'some data';
-    beforeAll(async () => {
-      await multiSetter(testData);
-    });
-
-    it('calls `validate` inside', () => {
-      expect(validate).toHaveBeenCalled();
-    });
-
-    it('calls `multiSet` of wrappedAsyncStorage inside', () => {
-      expect(wrappedAsyncStorage.multiSet).toBeCalledWith(testData);
-    });
-  });
-});
-
-describe('createMultiGetter', () => {
-  const multiGetter = createMultiGetter(wrappedAsyncStorage);
-
-  it('returns multiGetter function', () => {
-    expect(multiGetter).toEqual(expect.any(Function));
-  });
-
-  describe('returned multiGetter function', () => {
-    it('calls `multiGet` of wrappedAsyncStorage inside', () => {
-      expect(wrappedAsyncStorage.multiSet).toBeCalled();
-    });
-  });
-});
-
 describe('createMultiMethods', () => {
   const multiSchema = PropTypes.objectOf(PropTypes.exact({
     a: PropTypes.number.isRequired,
@@ -145,11 +106,32 @@ describe('createMultiMethods', () => {
   }));
 
   const multiMethods = createMultiMethods(multiSchema, 'testMultiStorage', wrappedAsyncStorage);
+  const testData = { key: { a: 1 } };
+
+  describe('get', () => {
+    it('calls `multiGet` of wrappedAsyncStorage', async () => {
+      await multiMethods.get('key');
+      expect(wrappedAsyncStorage.multiGet).toBeCalledWith('key');
+    });
+  });
+
+  describe('set', () => {
+    beforeAll(async () => {
+      await multiMethods.set(testData);
+    });
+
+    it('calls `validate`', () => {
+      expect(validate).toHaveBeenCalled();
+    });
+
+    it('calls `multiSet` inside wrappedAsyncStorage', () => {
+      expect(wrappedAsyncStorage.multiSet).toBeCalledWith(testData);
+    });
+  });
 
   describe('merge', () => {
-    const data = { key: { a: 1 } };
     beforeAll(async () => {
-      await multiMethods.merge(data);
+      await multiMethods.merge(testData);
     });
 
     it('calls `validate` inside', () => {
@@ -157,8 +139,8 @@ describe('createMultiMethods', () => {
     });
 
     it('calls `multiMerge` inside wrappedAsyncStorage', async () => {
-      await multiMethods.merge(data);
-      expect(wrappedAsyncStorage.multiMerge).toBeCalledWith(data);
+      await multiMethods.merge(testData);
+      expect(wrappedAsyncStorage.multiMerge).toBeCalledWith(testData);
     });
   });
 
