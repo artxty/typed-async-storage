@@ -11,7 +11,7 @@ npm install --save typed-async-storage
 ```
 
 ## Usage
-Import the package and *AsyncStorage* and *PropTypes* as well
+Import the package **AsyncStorage** and **PropTypes**:
 ```js
 import createStorage from 'typed-async-storage';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 ```
 
 ### Simple storage
-To create a simple storage (single storage) use your old friend *PropTypes* to create a schema
+Create schema in a simple storage (single storage) using *PropTypes* 
 ```js
 const simpleSchema = {
   greetingText: PropTypes.string.isRequired,
@@ -36,7 +36,8 @@ const simpleStorage = createStorage({
 });
 ```
 
-Now you can interact with your 'simpleStorage' and have *PropTypes* validation out of the box!
+Now you can interact with your 'simpleStorage' and *PropTypes* validation.
+
 ```js
 await simpleStorage.set('darkMode', true);
 const isDarkMode = await simpleStorage.get('darkMode');
@@ -47,7 +48,7 @@ await simpleStorage.set('greetingText', 42);
 ```
 
 ### Multiple Storage
-To deal with sets you have to wrap your schema in PropTypes.objectOf(), check next example.
+To deal with sets, you have to wrap your schema in PropTypes.objectOf(), Check Next Example.
 ```js
 // Or you can use PropTypes.objectOf(PropTypes.shape({ ... }))
 const usersSchema = PropTypes.objectOf(PropTypes.exact({
@@ -86,6 +87,7 @@ To make things simple, try to create storages as small as possible. For each gro
 
 ## API
 API is built over [AsyncStorage API](https://react-native-community.github.io/async-storage/docs/api)
+
 ### Simple Storage
 ```js
 // Sets value for a specific key
