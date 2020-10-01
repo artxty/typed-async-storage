@@ -47,7 +47,7 @@ await simpleStorage.set('greetingText', 42);
 ```
 
 ### Multiple Storage
-To deal with sets you have to wrap your schema in PropTypes.objectOf(), check next example.
+To deal with sets you have to wrap your schema in PropTypes.objectOf(). **Refer to the below example:**
 ```js
 // Or you can use PropTypes.objectOf(PropTypes.shape({ ... }))
 const usersSchema = PropTypes.objectOf(PropTypes.exact({
