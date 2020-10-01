@@ -2,7 +2,7 @@
 
 # typed-async-storage
 
-A tiny wrapper for [AsyncStorage](https://github.com/react-native-community/async-storage) that allows creating schema-based storage and validation using [PropTypes](https://www.npmjs.com/package/prop-types) 
+A tiny wrapper for [AsyncStorage](https://github.com/react-native-community/async-storage) that allows creating a schema-based storage and validation using [PropTypes](https://www.npmjs.com/package/prop-types) 
 
 ## Installation
 
@@ -27,7 +27,7 @@ const simpleSchema = {
 };
 ```
 
-Call *createStorage* and pass these required params: storage name, schema, and *AsyncStorage*
+Call *createStorage* and pass these required parameters: storage name, schema, and *AsyncStorage*
 ```js
 const simpleStorage = createStorage({
   name: 'simpleStorage', // name must be unique for every storage
@@ -47,7 +47,7 @@ await simpleStorage.set('greetingText', 42);
 ```
 
 ### Multiple Storage
-To deal with sets you have to wrap your schema in PropTypes.objectOf(), check next example.
+To deal with sets, you have to wrap your schema in PropTypes.objectOf(), check next example.
 ```js
 // Or you can use PropTypes.objectOf(PropTypes.shape({ ... }))
 const usersSchema = PropTypes.objectOf(PropTypes.exact({
