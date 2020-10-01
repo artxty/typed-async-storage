@@ -2,7 +2,7 @@
 
 # typed-async-storage
 
-A tiny wrapper for [AsyncStorage](https://github.com/react-native-community/async-storage) that allows creating an unencrypted, asynchronous, persistent and schema-based storage (that is global to an app and should be used instead of LocalStorage) and validation using [PropTypes](https://www.npmjs.com/package/prop-types) 
+A tiny wrapper for [AsyncStorage](https://github.com/react-native-community/async-storage) that allows creating schema-based storage and validation using [PropTypes](https://www.npmjs.com/package/prop-types)  
 
 ## Installation
 
