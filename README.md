@@ -2,7 +2,7 @@
 
 # typed-async-storage
 
-A tiny wrapper for [AsyncStorage](https://github.com/react-native-community/async-storage) that allows creating schema-based storage and validation using [PropTypes](https://www.npmjs.com/package/prop-types) 
+A tiny wrapper for [AsyncStorage](https://github.com/react-native-community/async-storage) that allows creating an unencrypted, asynchronous, persistent and schema-based storage (that is global to an app and should be used instead of LocalStorage) and validation using [PropTypes](https://www.npmjs.com/package/prop-types) 
 
 ## Installation
 
@@ -11,7 +11,7 @@ npm install --save typed-async-storage
 ```
 
 ## Usage
-Import the package and *AsyncStorage* and *PropTypes* as well
+Import the package along with *AsyncStorage* and *PropTypes*
 ```js
 import createStorage from 'typed-async-storage';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -82,7 +82,7 @@ await usersStorage.get(['user1', 'user2']);
 ```
 
 ## Note
-To make things simple, try to create storages as small as possible. For each group of items create a new storage (users, settings, channels, etc.). Do **not** create a master storage that contains all the data of your application, it is **impossible** to deal with it using this package. Break it down into several small storages.
+To make things simple, try to create storages that are as small as possible. For each group of items, create a new storage (users, settings, channels, etc.). Do **not** create a master storage that contains all the data of your application, it is **impossible** to deal with it using this package. Break it down into several smaller storages.
 
 ## API
 API is built over [AsyncStorage API](https://react-native-community.github.io/async-storage/docs/api)
