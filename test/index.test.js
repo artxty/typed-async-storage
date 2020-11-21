@@ -1,5 +1,5 @@
 const AsyncStorage = require('@react-native-community/async-storage');
-const PropTypes = require('prop-types/prop-types');
+const PropTypes = require('prop-types');
 const createStorage = require('../src/index');
 
 const testSchema = {
